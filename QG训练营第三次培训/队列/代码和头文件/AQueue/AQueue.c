@@ -130,7 +130,7 @@ Status TraverseAQueue(const AQueue *Q, void (*foo)(void *q))	//遍历函数操作
 		printf("队列为空");
 		return FALSE;
 	}
-	for(start = Q->front ; start < Q->rear ; start++)
+	for(start = Q->front ; start <= Q->rear ; start++)
 	{
 		type = datatype[start];
 		foo(Q->data[start]);	//逐层打印 
