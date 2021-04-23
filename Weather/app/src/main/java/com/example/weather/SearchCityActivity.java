@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Looper;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
@@ -22,7 +23,7 @@ import database.DatabaseManager;
 
 public class SearchCityActivity extends AppCompatActivity implements View.OnClickListener {
 
-    String url ="https://www.tianqiapi.com/free/day?appid=63143258&appsecret=x1ydGKjZ&city=";
+    String url ="https://www.tianqiapi.com/free/day?appid=63143258&appsecret=8bx0w1AW&city=";
     EditText searchEt;
     ImageView submitIv;
     GridView searchGv;
@@ -62,12 +63,13 @@ public class SearchCityActivity extends AppCompatActivity implements View.OnClic
             case R.id.search_iv_submit:
                 city = searchEt.getText().toString();
                 if (!TextUtils.isEmpty(city)){
+                    String URL = url+city;
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
                             BufferedInputStream in = null;
                             try {
-                                HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
+                                HttpURLConnection conn = (HttpURLConnection) new URL(URL).openConnection();
                                 in = new BufferedInputStream(conn.getInputStream());
                                 StringBuilder stringBuilder = new StringBuilder();
                                 byte[] bytes = new byte[1024];
@@ -97,7 +99,9 @@ public class SearchCityActivity extends AppCompatActivity implements View.OnClic
 
     private void isexistence(boolean isexistence){
         if (!isexistence){
+            Looper.prepare();
             Toast.makeText(this,"该城市不存在！",Toast.LENGTH_SHORT).show();
+            Looper.loop();
         }else {
             DatabaseManager.addCity(city,null,null,null,null,null,null,null,null,null,null);
             Intent intent = new Intent(this,MainActivity.class);
